@@ -1,11 +1,27 @@
-
 import streamlit as st
 import time
 import os
 from typing import Dict, List, Optional
 from dataclasses import dataclass
 import json
+from google.oauth2 import service_account
+from google.cloud import aiplatform
 
+# Check if the key for secrets exists
+if "google_service_account" in st.secrets:
+    # Load the credentials from the dictionary-like secret
+    creds_dict = st.secrets["google_service_account"]
+    credentials = service_account.Credentials.from_service_account_info(creds_dict)
+    
+    project_id = st.secrets["GOOGLE_CLOUD_PROJECT"]
+
+    # Initialize the Vertex AI client
+    aiplatform.init(project=project_id, credentials=credentials)
+    st.sidebar.success("✅ Authenticated with Google Cloud")
+else:
+    st.error("Google Cloud service account credentials not found in Streamlit Secrets.")
+    st.stop()
+    
 # Import pour Vertex AI (Google Cloud)
 try:
     import vertexai
