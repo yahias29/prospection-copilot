@@ -63,21 +63,8 @@ class VertexAIAgent:
         self.prompt = prompt
         self.ddgs = DDGS() if role == "Chercheur de Crochets" else None
 
-        # Configuration Vertex AI
-        project_id = os.getenv("GOOGLE_CLOUD_PROJECT")
-        location = os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1")
-
-        if not project_id:
-            st.error("""
-            ⚠️ Configuration Google Cloud manquante. Définissez:
-            - GOOGLE_CLOUD_PROJECT=your-project-id
-            - GOOGLE_APPLICATION_CREDENTIALS=path/to/service-account.json
-            """)
-            st.stop()
-
-        # Initialisation Vertex AI
-        vertexai.init(project=project_id, location=location)
-        self.model = GenerativeModel("gemini-1.5-flash")
+        # Initialisation du modèle Gemini (l'initialisation du projet est déjà faite)
+        self.model = GenerativeModel("gemini-2.5-pro")
 
     def process(self, input_data: str, context: Dict = None) -> str:
         """Traitement avec Vertex AI Gemini"""
@@ -331,27 +318,6 @@ def setup_vertex_ai_environment():
         layout="wide"
     )
 
-    # Vérification Google Cloud
-    project_id = os.getenv("GOOGLE_CLOUD_PROJECT")
-    credentials_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-
-    if not project_id or not credentials_path:
-        st.error("""
-        🔑 **Configuration Google Cloud requise:**
-
-        1. **Projet Google Cloud**: Créez un projet sur [Google Cloud Console](https://console.cloud.google.com)
-        2. **Activez Vertex AI API**: Dans votre projet GCP
-        3. **Service Account**: Créez une clé de service avec rôle Vertex AI User
-        4. **Variables d'environnement**:
-           ```
-           GOOGLE_CLOUD_PROJECT=your-project-id
-           GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json
-           ```
-
-        📌 **DuckDuckGo**: 100% GRATUIT, aucune configuration !
-        """)
-        st.stop()
-
 def main():
     """Interface principale Vertex AI"""
     setup_vertex_ai_environment()
@@ -363,7 +329,8 @@ def main():
     with st.container():
         col1, col2, col3 = st.columns(3)
         with col1:
-            if os.getenv("GOOGLE_CLOUD_PROJECT"):
+            # Check for the same secret used in authentication
+            if "gcp_service_account_credentials" in st.secrets:
                 st.success("🔗 Vertex AI: Connecté")
             else:
                 st.error("❌ Vertex AI: Non configuré")
