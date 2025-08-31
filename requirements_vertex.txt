@@ -1,0 +1,19 @@
+# Requirements pour Co-pilote Prospection IA - Vertex AI Edition
+# ============================================================
+
+# Interface Streamlit
+streamlit>=1.28.0
+
+# Google Cloud Vertex AI
+google-cloud-aiplatform>=1.38.0
+
+# Recherche web gratuite (aucune clé API requise)
+duckduckgo-search>=3.9.0
+
+# Configuration et utilitaires
+python-dotenv>=1.0.0
+pandas>=2.0.0
+
+# Optionnels pour améliorer l'interface
+streamlit-option-menu>=0.3.6
+plotly>=5.17.0
