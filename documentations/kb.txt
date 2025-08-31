@@ -1,0 +1,6 @@
+agent_prompts_vertex.py
+oneline.py
+prospection_copilot_vertex.py
+requirements.txt
+setup_vertex.py
+.gitignore
