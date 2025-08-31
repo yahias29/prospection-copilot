@@ -353,8 +353,8 @@ def main():
         col1, col2 = st.columns([1, 2])
 
         with col1:
-            contact_name = st.text_input("Nom du contact *", placeholder="Ex: Kevin Martin")
-            company_name = st.text_input("Entreprise *", placeholder="Ex: Made In Tracker")
+            contact_name = st.text_input("Nom du contact *", placeholder="Ex: Elon Musk")
+            company_name = st.text_input("Entreprise *", placeholder="Ex: Twitter")
 
         with col2:
             company_description = st.text_area(
