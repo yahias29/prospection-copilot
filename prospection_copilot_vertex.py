@@ -7,21 +7,24 @@ import json
 from google.oauth2 import service_account
 from google.cloud import aiplatform
 
-# Check if the key for secrets exists
-if "google_service_account" in st.secrets:
-    # Load the credentials from the dictionary-like secret
-    creds_dict = st.secrets["google_service_account"]
+# Use the correct key name from your secrets.toml file
+if "gcp_service_account_credentials" in st.secrets:
+    # Load the credentials from the JSON string
+    creds_json_str = st.secrets["gcp_service_account_credentials"]
+    creds_dict = json.loads(creds_json_str)
     credentials = service_account.Credentials.from_service_account_info(creds_dict)
     
-    project_id = st.secrets["GOOGLE_CLOUD_PROJECT"]
+    # Use the correct project_id key from your secrets.toml file
+    project_id = st.secrets["gcp_project_id"]
 
     # Initialize the Vertex AI client
     aiplatform.init(project=project_id, credentials=credentials)
     st.sidebar.success("✅ Authenticated with Google Cloud")
+
 else:
     st.error("Google Cloud service account credentials not found in Streamlit Secrets.")
     st.stop()
-    
+
 # Import pour Vertex AI (Google Cloud)
 try:
     import vertexai
