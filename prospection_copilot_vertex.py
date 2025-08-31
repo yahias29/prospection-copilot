@@ -8,22 +8,39 @@ from google.oauth2 import service_account
 from google.cloud import aiplatform
 
 # Use the correct key name from your secrets.toml file
-if "gcp_service_account_credentials" in st.secrets:
-    # Load the credentials from the JSON string
-    creds_json_str = st.secrets["gcp_service_account_credentials"]
-    creds_dict = json.loads(creds_json_str)
-    credentials = service_account.Credentials.from_service_account_info(creds_dict)
+# --- DEBUG DIAGNOSTIC BLOCK ---
+
+import streamlit as st
+import json
+from google.oauth2 import service_account
+
+st.title("Secret Debugger")
+
+# The key your code is trying to use
+secret_key = "gcp_service_account_credentials"
+
+if secret_key in st.secrets:
+    st.success(f"Found the secret key: '{secret_key}'")
     
-    # Use the correct project_id key from your secrets.toml file
-    project_id = st.secrets["gcp_project_id"]
+    # Get the secret value from Streamlit
+    secret_value = st.secrets[secret_key]
+    
+    # Print the TYPE of the secret value
+    st.subheader("1. Type of the Secret:")
+    st.write(f"The secret value is a: **{type(secret_value)}**")
 
-    # Initialize the Vertex AI client
-    aiplatform.init(project=project_id, credentials=credentials)
-    st.sidebar.success("✅ Authenticated with Google Cloud")
-
+    # Print the CONTENT of the secret value
+    st.subheader("2. Content of the Secret:")
+    st.text(secret_value)
+    
 else:
-    st.error("Google Cloud service account credentials not found in Streamlit Secrets.")
-    st.stop()
+    st.error(f"Could not find the secret key: '{secret_key}'")
+    st.warning("Please check your secrets.toml file to make sure the key name is correct.")
+
+# Stop the app here so we can see the output
+st.stop()
+
+# --- END OF DEBUG BLOCK ---
 
 # Import pour Vertex AI (Google Cloud)
 try:
