@@ -4,3 +4,4 @@ prospection_copilot_vertex.py
 requirements.txt
 setup_vertex.py
 .gitignore
+#test
