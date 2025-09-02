@@ -1,6 +1,6 @@
 # --- Credentials ---
 # Never commit sensitive key files
-*.json
+service-account.json
 .env
 
 # --- Python ---
